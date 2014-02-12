@@ -8,6 +8,9 @@
 
 #import "AppNetUser.h"
 
+/*!
+ * Displays App.net unified stream
+ */
 @interface StreamVC : UITableViewController
 
 /*!
@@ -15,6 +18,9 @@
  */
 @property (nonatomic, strong) ANKClient* client;
 
+/*!
+ * App.net user with valid access token
+ */
 @property (nonatomic, strong) AppNetUser* appNetUser;
 
 @end

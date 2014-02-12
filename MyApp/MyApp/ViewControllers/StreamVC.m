@@ -186,6 +186,10 @@
 
 - (void)refreshTimes
 {
+    //
+    // Refreshes only time in all cells, most noticeable with seconds
+    //
+    
     for (NSInteger i = 0; i < [self.stream count]; i++)
     {
         NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
@@ -321,12 +325,16 @@
     ANKPost* post = self.stream[indexPath.row];
     
     //
-    // Attributed text
+    // Setup handle and username
     //
     
     NSMutableAttributedString* user = [[NSMutableAttributedString alloc] initWithString:post.user.name attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor] } ];
     
     [user appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" @%@", post.user.username] attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0], NSForegroundColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.8] }]];
+    
+    //
+    // Cell data
+    //
     
     cell.usernameLabel.attributedText = user;
     cell.dateLabel.text = [post.createdAt readableTimeSinceNow];

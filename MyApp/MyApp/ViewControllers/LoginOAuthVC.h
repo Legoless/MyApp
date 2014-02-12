@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+/*!
+ * Displays OAuth login system in web view
+ */
 @interface LoginOAuthVC : UIViewController
 
 @end

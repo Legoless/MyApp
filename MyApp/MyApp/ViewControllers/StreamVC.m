@@ -16,34 +16,30 @@
 
 @interface StreamVC ()
 
-@property (nonatomic, strong) NSMutableArray* stream;
+// Thread-Safe stream
+@property (atomic, strong) NSMutableArray* stream;
 
 @property (nonatomic, strong) ANKAPIResponseMeta* responseMeta;
+
+@property (nonatomic, strong) UIImageView* glowImageView;
+
+@property (nonatomic, strong) NSTimer* streamTimer;
 
 @end
 
 @implementation StreamVC
 
-//
-// Lazy instantiation of stream array
-//
-- (NSMutableArray *)stream
-{
-    if (!_stream)
-    {
-        _stream = [NSMutableArray array];
-    }
-    
-    return _stream;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    //self.tableView.clipsToBounds = YES;
-    [self.tableView.infiniteScrollingView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    self.stream = [NSMutableArray array];
+    
+    //
+    // Load first batch of posts
+    //
     
     __unsafe_unretained typeof (self) weakSelf = self;
     
@@ -55,8 +51,118 @@
     [self loadPosts];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView.infiniteScrollingView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+    
+    //
+    // Put a slight gradient view on top
+    //
+    
+    self.glowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gradient-glow"]];
+    
+    [self.navigationController.view addSubview:self.glowImageView];
+    
+    self.streamTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(loadNewPosts:) userInfo:nil repeats:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.glowImageView removeFromSuperview];
+    
+    [self.streamTimer invalidate];
+    self.streamTimer = nil;
+}
+
+- (void)loadNewPosts:(id)sender
+{
+    if (![self.stream count])
+    {
+        return;
+    }
+    
+    ANKPost* post = [self.stream firstObject];
+    
+    self.client.pagination = [ANKPaginationSettings settingsWithSinceID:post.postID beforeID:nil count:10.0];
+    
+    //
+    // Get posts
+    //
+    
+    [self.client fetchUnifiedStreamForCurrentUserWithCompletion:^(id responseObject, ANKAPIResponseMeta *meta, NSError *error)
+    {
+        //NSLog(@"Response: %@", responseObject);
+        
+        responseObject = [responseObject filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isDeleted = NO"]];
+        
+        //
+        // There might be an invalid token in certain cases, pop just to make sure
+        //
+
+        if (error)
+        {
+
+            //
+            // Delete user's credentials
+            //
+
+            [self.appNetUser deleteObject];
+
+            [self.navigationController popToRootViewControllerAnimated:NO];
+        }
+        else if ([responseObject count])
+        {
+            [self.stream insertObjects:responseObject atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [responseObject count])]];
+            
+
+            // Create index paths to insert
+            NSMutableArray* indexPaths = [NSMutableArray array];
+
+            for (NSInteger i = 0; i < [responseObject count]; i++)
+            {
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                
+                [indexPaths addObject:indexPath];
+            }
+
+            //
+            // Insert stuff to tableview
+            //
+
+            [self.tableView beginUpdates];
+
+            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+            [self.tableView endUpdates];
+        }
+        
+        [self refreshTimes];
+    }];
+
+}
+
+- (void)refreshTimes
+{
+    for (NSInteger i = 0; i < [self.stream count]; i++)
+    {
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        
+        PostTableViewCell* cell = (PostTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        
+        ANKPost* post = self.stream[i];
+        
+        cell.dateLabel.text = [post.createdAt readableTimeSinceNow];
+    }
+}
+
 - (void)loadPosts
 {
+    //NSLog(@"Loading posts");
+    
     // Handle pagination
     if (self.responseMeta)
     {
@@ -68,7 +174,9 @@
         {
             ANKPost* post = [self.stream lastObject];
             
-            self.client.pagination = [ANKPaginationSettings settingsWithSinceID:self.responseMeta.minID beforeID:post.postID count:10.0];
+            //NSLog(@"Setting pagination at: SinceID: %@ BeforeID: %@", self.responseMeta.minID, post.postID);
+            
+            self.client.pagination = [ANKPaginationSettings settingsWithSinceID:nil beforeID:post.postID count:10.0];
         }
     }
     
@@ -78,12 +186,16 @@
     
     [self.client fetchUnifiedStreamForCurrentUserWithCompletion:^(id responseObject, ANKAPIResponseMeta *meta, NSError *error)
     {
+        responseObject = [responseObject filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"isDeleted = NO"]];
+        
         //
         // There might be an invalid token in certain cases, pop just to make sure
         //
-
+        
         if (error)
         {
+            //NSLog(@"Error: %@", error);
+            
             //
             // Delete user's credentials
             //
@@ -94,6 +206,8 @@
         }
         else
         {
+            //NSLog(@"Response: %@", responseObject);
+            
             NSInteger streamCount = [self.stream count];
             
             [self.stream addObjectsFromArray:responseObject];
@@ -115,7 +229,7 @@
             
             [self.tableView beginUpdates];
             
-            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
             
             [self.tableView endUpdates];
             
@@ -123,6 +237,11 @@
             [self.tableView.infiniteScrollingView stopAnimating];
         }
     }];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -135,11 +254,11 @@
     
     CGSize size = [post.text boundingRectWithSize:CGSizeMake(231.0, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0 ] } context:nil].size;
     
-    NSLog(@"Size: %f", size.height);
+    //NSLog(@"Size: %f", size.height);
     
     if (size.height > 20.0)
     {
-        return size.height + 9.0 + 34.0 + 2.0;
+        return size.height + 9.0 + 40.0;
     }
     
     return 80.0;
@@ -175,12 +294,13 @@
     cell.contentTextView.textColor = [UIColor whiteColor];
     cell.contentTextView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
     cell.contentTextView.scrollEnabled = NO;
+    cell.contentTextView.linkTextAttributes = @{ NSForegroundColorAttributeName : [UIColor colorWithRed:129.0 / 255.0 green:204.0 / 255.0 blue:255.0 / 255.0 alpha:1.0] };
     
     NSURL* imageURL = [post.user.avatarImage URLForSize:cell.avatarImageView.frame.size];
     
     cell.avatarImageView.layer.cornerRadius = 25.0;
     cell.avatarImageView.clipsToBounds = YES;
-    cell.avatarImageView.layer.borderColor = [[UIColor colorWithWhite:1.0 alpha:0.4] CGColor];
+    cell.avatarImageView.layer.borderColor = [[UIColor colorWithWhite:1.0 alpha:0.6] CGColor];
     cell.avatarImageView.layer.borderWidth = 1.0;
     
     [cell.avatarImageView setImageWithURL:imageURL];

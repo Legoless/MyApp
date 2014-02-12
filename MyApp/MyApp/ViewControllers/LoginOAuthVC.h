@@ -1,13 +1,13 @@
 //
-//  LoginVC.h
+//  LoginOAuthVC.h
 //  MyApp
 //
-//  Created by Dal Rupnik on 10/02/14.
+//  Created by Dal Rupnik on 12/02/14.
 //  Copyright (c) 2014 arvystate.net. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface LoginVC : UIViewController
+@interface LoginOAuthVC : UIViewController
 
 @end

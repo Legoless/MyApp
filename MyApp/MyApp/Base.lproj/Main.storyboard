@@ -4,69 +4,40 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
-        <!--LoginVC-->
-        <scene sceneID="ufC-wZ-h7g">
+        <!--LoginO AuthVC-->
+        <scene sceneID="4RH-Sg-TIs">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="LoginVC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginOAuthVC" id="s6U-JI-Zur" customClass="LoginOAuthVC" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="72m-Lc-pK2"/>
-                        <viewControllerLayoutGuide type="bottom" id="6Wc-I8-4c7"/>
+                        <viewControllerLayoutGuide type="top" id="TSd-e9-0Jl"/>
+                        <viewControllerLayoutGuide type="bottom" id="9vR-J1-7o2"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                    <view key="view" contentMode="scaleToFill" id="Vbb-E5-6qo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Am8-bY-RLc">
-                                <rect key="frame" x="106" y="277" width="108" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Login">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="loginButtonTap:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fpE-oj-yfF"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3FT-JF-AEu">
-                                <rect key="frame" x="20" y="135" width="280" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="calibratedWhite"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="WJm-Na-WTq"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="REO-WJ-mXw">
-                                <rect key="frame" x="20" y="193" width="280" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="calibratedWhite"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="bu8-rg-hyz"/>
-                                </connections>
-                            </textField>
+                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rSR-ML-E9B">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="fwr-Ay-6jx"/>
+                    <navigationItem key="navigationItem" id="RzO-zT-xER"/>
                     <connections>
-                        <outlet property="loginButton" destination="Am8-bY-RLc" id="wxU-p4-KY1"/>
-                        <outlet property="passwordTextField" destination="REO-WJ-mXw" id="CWB-YI-6PO"/>
-                        <outlet property="usernameTextField" destination="3FT-JF-AEu" id="RDn-Me-3MB"/>
-                        <segue destination="djK-nP-f5o" kind="push" identifier="StreamSegue" id="aPT-4V-0Sf"/>
+                        <outlet property="webView" destination="rSR-ML-E9B" id="Gth-g8-120"/>
+                        <segue destination="djK-nP-f5o" kind="push" id="UtV-bo-VpN"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rnu-gy-Qim" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1206" y="191"/>
+            <point key="canvasLocation" x="1191" y="191"/>
         </scene>
-        <!--Table View Controller-->
+        <!--StreamVC-->
         <scene sceneID="Op8-fi-h3R">
             <objects>
-                <tableViewController id="djK-nP-f5o" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="StreamVC" id="djK-nP-f5o" customClass="StreamVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="22" sectionFooterHeight="22" id="A1u-cz-KwP">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -103,7 +74,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="gdb-ys-D0y"/>
+                        <segue destination="s6U-JI-Zur" kind="relationship" relationship="rootViewController" id="3GW-Lo-m1o"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I8O-lK-eo0" userLabel="First Responder" sceneMemberID="firstResponder"/>

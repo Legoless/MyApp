@@ -6,8 +6,11 @@
 //  Copyright (c) 2014 arvystate.net. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 @interface StreamVC : UITableViewController
+
+/*!
+ * App.net client instance that loads the stream
+ */
+@property (nonatomic, strong) ANKClient* client;
 
 @end

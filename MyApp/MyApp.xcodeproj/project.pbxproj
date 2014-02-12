@@ -20,8 +20,8 @@
 		3853D94E18A951860096BD60 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3853D93018A951860096BD60 /* UIKit.framework */; };
 		3853D95618A951860096BD60 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3853D95418A951860096BD60 /* InfoPlist.strings */; };
 		3853D95818A951860096BD60 /* MyAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3853D95718A951860096BD60 /* MyAppTests.m */; };
+		3878545E18ABE991004A6524 /* LoginOAuthVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3878545D18ABE991004A6524 /* LoginOAuthVC.m */; };
 		38D8EA0D18A95A6200433512 /* UINavigationController+BackgroundImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D8EA0C18A95A6200433512 /* UINavigationController+BackgroundImage.m */; };
-		38D8EA1018A95A7E00433512 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D8EA0F18A95A7E00433512 /* LoginVC.m */; };
 		38D8EA1318A95A8A00433512 /* StreamVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D8EA1218A95A8A00433512 /* StreamVC.m */; };
 		38D8EA1718A95C3100433512 /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 38D8EA1618A95C3100433512 /* PostTableViewCell.m */; };
 		B62B9AFD2A0747FF8FA10B10 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32FB7A9CF7764AD799EFFDE6 /* libPods.a */; };
@@ -56,10 +56,10 @@
 		3853D95318A951860096BD60 /* MyAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyAppTests-Info.plist"; sourceTree = "<group>"; };
 		3853D95518A951860096BD60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3853D95718A951860096BD60 /* MyAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyAppTests.m; sourceTree = "<group>"; };
+		3878545C18ABE991004A6524 /* LoginOAuthVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginOAuthVC.h; sourceTree = "<group>"; };
+		3878545D18ABE991004A6524 /* LoginOAuthVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginOAuthVC.m; sourceTree = "<group>"; };
 		38D8EA0B18A95A6200433512 /* UINavigationController+BackgroundImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+BackgroundImage.h"; sourceTree = "<group>"; };
 		38D8EA0C18A95A6200433512 /* UINavigationController+BackgroundImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+BackgroundImage.m"; sourceTree = "<group>"; };
-		38D8EA0E18A95A7E00433512 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
-		38D8EA0F18A95A7E00433512 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
 		38D8EA1118A95A8A00433512 /* StreamVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamVC.h; sourceTree = "<group>"; };
 		38D8EA1218A95A8A00433512 /* StreamVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamVC.m; sourceTree = "<group>"; };
 		38D8EA1518A95C3100433512 /* PostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostTableViewCell.h; sourceTree = "<group>"; };
@@ -131,7 +131,6 @@
 				38D8EA0618A959C200433512 /* Delegate */,
 				38D8EA1818A95E6200433512 /* Global */,
 				38D8EA0818A95A2C00433512 /* Library */,
-				38D8EA0918A95A3900433512 /* Model */,
 				38D8EA0518A9598900433512 /* Resources */,
 				3853D93318A951860096BD60 /* Supporting Files */,
 				38D8EA0718A959D000433512 /* ViewControllers */,
@@ -190,8 +189,8 @@
 		38D8EA0718A959D000433512 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				38D8EA0E18A95A7E00433512 /* LoginVC.h */,
-				38D8EA0F18A95A7E00433512 /* LoginVC.m */,
+				3878545C18ABE991004A6524 /* LoginOAuthVC.h */,
+				3878545D18ABE991004A6524 /* LoginOAuthVC.m */,
 				38D8EA1118A95A8A00433512 /* StreamVC.h */,
 				38D8EA1218A95A8A00433512 /* StreamVC.m */,
 			);
@@ -204,13 +203,6 @@
 				38D8EA0A18A95A6200433512 /* UINavigationController+BackgroundImage */,
 			);
 			path = Library;
-			sourceTree = "<group>";
-		};
-		38D8EA0918A95A3900433512 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		38D8EA0A18A95A6200433512 /* UINavigationController+BackgroundImage */ = {
@@ -378,7 +370,7 @@
 				38D8EA1718A95C3100433512 /* PostTableViewCell.m in Sources */,
 				3853D93918A951860096BD60 /* main.m in Sources */,
 				38D8EA1318A95A8A00433512 /* StreamVC.m in Sources */,
-				38D8EA1018A95A7E00433512 /* LoginVC.m in Sources */,
+				3878545E18ABE991004A6524 /* LoginOAuthVC.m in Sources */,
 				38D8EA0D18A95A6200433512 /* UINavigationController+BackgroundImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

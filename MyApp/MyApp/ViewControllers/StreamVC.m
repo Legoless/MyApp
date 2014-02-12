@@ -8,6 +8,7 @@
 
 #import <SVPullToRefresh/SVPullToRefresh.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <M13ProgressSuite/M13ProgressViewRing.h>
 
 #import "StreamVC.h"
 
@@ -24,6 +25,8 @@
 @property (nonatomic, strong) UIImageView* glowImageView;
 
 @property (nonatomic, strong) NSTimer* streamTimer;
+
+@property (nonatomic, strong) M13ProgressViewRing* ring;
 
 @end
 
@@ -55,8 +58,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.tableView.infiniteScrollingView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
-    
     //
     // Put a slight gradient view on top
     //
@@ -66,6 +67,18 @@
     [self.navigationController.view addSubview:self.glowImageView];
     
     self.streamTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(loadNewPosts:) userInfo:nil repeats:YES];
+    
+    if (![self.stream count])
+    {
+        self.ring = [[M13ProgressViewRing alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2.0 - 20.0, self.view.frame.size.height / 2.0 - 20.0, 40.0, 40.0)];
+        self.ring.secondaryColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4];
+        self.ring.showPercentage = NO;
+        self.ring.indeterminate = YES;
+        
+        [self.view addSubview:self.ring];
+    }
+    
+    [self.tableView.infiniteScrollingView setCustomView:self.ring forState:SVInfiniteScrollingStateAll];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -105,7 +118,6 @@
 
         if (error)
         {
-
             //
             // Delete user's credentials
             //
@@ -116,9 +128,10 @@
         }
         else if ([responseObject count])
         {
+            [self.ring removeFromSuperview];
+            
             [self.stream insertObjects:responseObject atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [responseObject count])]];
             
-
             // Create index paths to insert
             NSMutableArray* indexPaths = [NSMutableArray array];
 
@@ -206,6 +219,7 @@
         }
         else
         {
+            [self.ring removeFromSuperview];
             //NSLog(@"Response: %@", responseObject);
             
             NSInteger streamCount = [self.stream count];

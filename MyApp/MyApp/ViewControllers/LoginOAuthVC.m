@@ -25,6 +25,11 @@
     [self.navigationController setBackgroundImage:[UIImage imageNamed:@"background2"]];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

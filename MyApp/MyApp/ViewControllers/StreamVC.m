@@ -24,6 +24,8 @@
 
 @property (nonatomic, strong) UIImageView* glowImageView;
 
+@property (nonatomic, strong) UIImageView* backgroundImageView;
+
 @property (nonatomic, strong) NSTimer* streamTimer;
 
 @property (nonatomic, strong) M13ProgressViewRing* ring;
@@ -50,8 +52,6 @@
     {
         [weakSelf loadPosts];
     }];
-    
-    [self loadPosts];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -59,12 +59,22 @@
     [super viewWillAppear:animated];
     
     //
-    // Put a slight gradient view on top
+    // Workaround for navigation segue
     //
     
-    self.glowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gradient-glow"]];
+    self.backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background2"]];
     
-    [self.navigationController.view addSubview:self.glowImageView];
+    // Fix the frame to mimic the entire background
+    CGRect frame = self.backgroundImageView.frame;
+    frame.origin.y -= 20.0;
+    
+    self.backgroundImageView.frame = frame;
+    
+    [self.view addSubview:self.backgroundImageView];
+    
+    //
+    // Start timers and loading ring
+    //
     
     self.streamTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(loadNewPosts:) userInfo:nil repeats:YES];
     
@@ -79,6 +89,22 @@
     }
     
     [self.tableView.infiniteScrollingView setCustomView:self.ring forState:SVInfiniteScrollingStateAll];
+    
+    [self loadPosts];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.backgroundImageView removeFromSuperview];
+    self.backgroundImageView = nil;
+    
+    //
+    // Put a slight gradient view on top
+    //
+    
+    self.glowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gradient-glow"]];
+    
+    [self.navigationController.view addSubview:self.glowImageView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -207,7 +233,7 @@
         
         if (error)
         {
-            //NSLog(@"Error: %@", error);
+            NSLog(@"Error: %@", error);
             
             //
             // Delete user's credentials
@@ -220,7 +246,7 @@
         else
         {
             [self.ring removeFromSuperview];
-            //NSLog(@"Response: %@", responseObject);
+            NSLog(@"Response: %@", responseObject);
             
             NSInteger streamCount = [self.stream count];
             

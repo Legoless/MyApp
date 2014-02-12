@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 arvystate.net. All rights reserved.
 //
 
+#import <M13ProgressSuite/M13ProgressViewRing.h>
+
 #import "LoginOAuthVC.h"
 #import "StreamVC.h"
 #import "AppNetUser.h"
@@ -13,6 +15,8 @@
 @interface LoginOAuthVC () <UIWebViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
+
+@property (nonatomic, strong) M13ProgressViewRing* ring;
 
 @end
 
@@ -33,6 +37,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    self.ring = [[M13ProgressViewRing alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2.0 - 20.0, self.view.frame.size.height / 2.0 - 20.0, 40.0, 40.0)];
+    self.ring.secondaryColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+    self.ring.showPercentage = NO;
+    self.ring.indeterminate = YES;
+    
+    [self.view addSubview:self.ring];
     
     //
     // Check for login, redirect immediately if available
@@ -62,6 +73,11 @@
     self.webView.delegate = self;
     
     [self.webView loadRequest:request];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [self.ring removeFromSuperview];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -145,7 +161,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"StreamVC"])
+    if ([segue.identifier isEqualToString:@"StreamSegue"])
     {
         //
         // Send shared client to StreamVC, since there is only one user at the moment.

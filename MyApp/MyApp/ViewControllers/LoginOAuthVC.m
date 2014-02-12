@@ -103,6 +103,11 @@
 {
     if ([segue.identifier isEqualToString:@"StreamVC"])
     {
+        //
+        // Send shared client to StreamVC, since there is only one user at the moment.
+        //
+        
+        [segue.destinationViewController setClient:[ANKClient sharedClient]];
     }
 }
 

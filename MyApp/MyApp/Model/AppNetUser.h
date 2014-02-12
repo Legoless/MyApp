@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString* accessToken;
 
 - (void)save;
+- (void)deleteObject;
 
 + (NSArray *)allAccounts;
 + (AppNetUser *)accountForUsername:(NSString *)username;

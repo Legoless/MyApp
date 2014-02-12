@@ -43,6 +43,11 @@
     [SSKeychain setPassword:self.accessToken forService:APP_NET_SERVICE account:self.username error:&error];
 }
 
+- (void)deleteObject
+{
+    [SSKeychain deletePasswordForService:APP_NET_SERVICE account:self.username];
+}
+
 + (NSArray *)allAccounts
 {
     NSArray* appNetAccounts = [SSKeychain accountsForService:APP_NET_SERVICE];

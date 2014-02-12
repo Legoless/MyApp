@@ -18,6 +18,13 @@
 
 @implementation LoginOAuthVC
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self.navigationController setBackgroundImage:[UIImage imageNamed:@"background2"]];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -26,11 +33,21 @@
     // Check for login, redirect immediately if available
     //
     
-    if ([AppNetUser defaultUser])
+    AppNetUser* user = [AppNetUser defaultUser];
+    
+    ANKAuthScope requestedScopes = ANKAuthScopeStream;
+    
+    // Create a URLRequest to kick off the auth process...
+    NSURLRequest *request = [[ANKClient sharedClient] webAuthRequestForClientID:APP_NET_CLIENT_ID redirectURI:@"myapp://auth" authScopes:requestedScopes state:nil appStoreCompliant:YES];
+    
+    if (user.accessToken)
     {
         id streamVC = [self.storyboard instantiateViewControllerWithIdentifier:@"StreamVC"];
-        
+
+        [ANKClient sharedClient].accessToken = user.accessToken;
+
         [streamVC setClient:[ANKClient sharedClient]];
+        [streamVC setAppNetUser:user];
         
         [self.navigationController pushViewController:streamVC animated:NO];
         
@@ -38,11 +55,6 @@
     }
     
     self.webView.delegate = self;
-    
-    ANKAuthScope requestedScopes = ANKAuthScopeStream;
-    
-    // Create a URLRequest to kick off the auth process...
-    NSURLRequest *request = [[ANKClient sharedClient] webAuthRequestForClientID:APP_NET_CLIENT_ID redirectURI:@"myapp://auth" authScopes:requestedScopes state:nil appStoreCompliant:YES];
     
     [self.webView loadRequest:request];
 }
@@ -82,27 +94,42 @@
                 code = [code substringToIndex:codeRange.location];
             }
             
-            [[ANKClient sharedClient] authenticateWebAuthAccessCode:code forClientID:APP_NET_CLIENT_ID clientSecret:APP_NET_CLIENT_SECRET];
+            ANKAuthScope requestedScopes = ANKAuthScopeStream;
             
-            //
-            // Save token to default user for now
-            //
+            // Create a URLRequest to kick off the auth process...
+            [[ANKClient sharedClient] webAuthRequestForClientID:APP_NET_CLIENT_ID redirectURI:@"myapp://auth" authScopes:requestedScopes state:nil appStoreCompliant:YES];
             
-            AppNetUser* user = [[AppNetUser alloc] init];
-            user.username = APP_NET_DEFAULT_USER;
-            user.accessToken = code;
-            
-            [user save];
-            
-            //
-            // Perform Segue to Stream view controller, but since this method could be called on another thread,
-            // need to make sure segue happens back on main thread.
-            //
-            dispatch_async(dispatch_get_main_queue(), ^
+            [ANKClient sharedClient].webAuthCompletionHandler = ^(BOOL success, NSError* error)
             {
-                [self performSegueWithIdentifier:@"StreamSegue" sender:self];
-            });
+                if (success)
+                {
+                    //
+                    // Save token to default user for now
+                    //
+                    
+                    AppNetUser* user = [[AppNetUser alloc] init];
+                    user.username = APP_NET_DEFAULT_USER;
+                    user.accessToken = [ANKClient sharedClient].accessToken;
+                    
+                    [user save];
+                    
+                    //
+                    // Perform Segue to Stream view controller, but since this method could be called on another thread,
+                    // need to make sure segue happens back on main thread.
+                    //
+                    dispatch_async(dispatch_get_main_queue(), ^
+                    {
+                        [self performSegueWithIdentifier:@"StreamSegue" sender:self];
+                    });
+                }
+                else
+                {
+                    NSLog(@"Error authenticating: %@", error);
+                }
+            };
 
+            
+            [[ANKClient sharedClient] authenticateWebAuthAccessCode:code forClientID:APP_NET_CLIENT_ID clientSecret:APP_NET_CLIENT_SECRET];
             
             return NO;
         }
@@ -120,6 +147,7 @@
         //
         
         [segue.destinationViewController setClient:[ANKClient sharedClient]];
+        [segue.destinationViewController setAppNetUser:[AppNetUser defaultUser]];
     }
 }
 

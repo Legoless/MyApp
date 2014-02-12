@@ -41,6 +41,10 @@
 {
     [super viewDidLoad];
     
+    //self.tableView.clipsToBounds = YES;
+    [self.tableView.infiniteScrollingView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
     __unsafe_unretained typeof (self) weakSelf = self;
     
     [self.tableView addInfiniteScrollingWithActionHandler:^
@@ -121,6 +125,26 @@
     }];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //
+    // Calculate size of row based on content text
+    //
+    
+    ANKPost* post = self.stream[indexPath.row];
+    
+    CGSize size = [post.text boundingRectWithSize:CGSizeMake(231.0, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0 ] } context:nil].size;
+    
+    NSLog(@"Size: %f", size.height);
+    
+    if (size.height > 20.0)
+    {
+        return size.height + 9.0 + 34.0 + 2.0;
+    }
+    
+    return 80.0;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.stream count];
@@ -137,12 +161,27 @@
     
     ANKPost* post = self.stream[indexPath.row];
     
-    cell.usernameLabel.text = post.user.username;
+    //
+    // Attributed text
+    //
+    
+    NSMutableAttributedString* user = [[NSMutableAttributedString alloc] initWithString:post.user.name attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0], NSForegroundColorAttributeName : [UIColor whiteColor] } ];
+    
+    [user appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" @%@", post.user.username] attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0], NSForegroundColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.8] }]];
+    
+    cell.usernameLabel.attributedText = user;
     cell.dateLabel.text = [post.createdAt readableTimeSinceNow];
     cell.contentTextView.text = post.text;
     cell.contentTextView.textColor = [UIColor whiteColor];
+    cell.contentTextView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
+    cell.contentTextView.scrollEnabled = NO;
     
     NSURL* imageURL = [post.user.avatarImage URLForSize:cell.avatarImageView.frame.size];
+    
+    cell.avatarImageView.layer.cornerRadius = 25.0;
+    cell.avatarImageView.clipsToBounds = YES;
+    cell.avatarImageView.layer.borderColor = [[UIColor colorWithWhite:1.0 alpha:0.4] CGColor];
+    cell.avatarImageView.layer.borderWidth = 1.0;
     
     [cell.avatarImageView setImageWithURL:imageURL];
     

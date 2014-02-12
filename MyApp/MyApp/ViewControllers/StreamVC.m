@@ -7,9 +7,11 @@
 //
 
 #import <SVPullToRefresh/SVPullToRefresh.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 #import "StreamVC.h"
 
+#import "NSDate+Formatting.h"
 #import "PostTableViewCell.h"
 
 @interface StreamVC ()
@@ -126,7 +128,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PostCell"];
+    PostTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PostCell"];
     
     if (!cell)
     {
@@ -135,8 +137,14 @@
     
     ANKPost* post = self.stream[indexPath.row];
     
-    cell.textLabel.text = post.user.username;
-    cell.textLabel.textColor = [UIColor whiteColor];
+    cell.usernameLabel.text = post.user.username;
+    cell.dateLabel.text = [post.createdAt readableTimeSinceNow];
+    cell.contentTextView.text = post.text;
+    cell.contentTextView.textColor = [UIColor whiteColor];
+    
+    NSURL* imageURL = [post.user.avatarImage URLForSize:cell.avatarImageView.frame.size];
+    
+    [cell.avatarImageView setImageWithURL:imageURL];
     
     return cell;
 }

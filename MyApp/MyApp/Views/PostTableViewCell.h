@@ -10,4 +10,10 @@
 
 @interface PostTableViewCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
+@property (weak, nonatomic) IBOutlet UITextView *contentTextView;
+
 @end

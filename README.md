@@ -3,6 +3,8 @@ MyApp
 
 A simple and elegant iOS 7 **App.net** client for iPhone, coded for quick practice. It displays unified stream of posts of logged in user in similar way as TweetBot does it for Twitter.
 
+![Screenshot](https://raw2.github.com/Legoless/MyApp/master/Resources/screenshot.png?token=1434530__eyJzY29wZSI6IlJhd0Jsb2I6TGVnb2xlc3MvTXlBcHAvbWFzdGVyL1Jlc291cmNlcy9zY3JlZW5zaG90LnBuZyIsImV4cGlyZXMiOjEzOTI4NTM3MjN9--ce53be2f7ad361d24167174fa4272629775afcb8 "Screenshot")
+
 Features
 =====
 - Beautiful design inspired by TweetBot
@@ -14,8 +16,8 @@ Features
 
 View Controllers
 =====
-- **LoginOAuthVC** - Handles representing login sheet to the user and saving of authorized users.
-- **StreamVC** - Handles representing and refreshing the list of posts in real time.
+- `LoginOAuthVC` - Handles representing login sheet to the user and saving of authorized users.
+- `StreamVC` - Handles representing and refreshing the list of posts in real time.
 
 Todo list
 =====

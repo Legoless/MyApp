@@ -38,7 +38,9 @@
         return;
     }
     
-    [SSKeychain setPassword:self.accessToken forService:APP_NET_SERVICE account:self.username];
+    NSError* error;
+    
+    [SSKeychain setPassword:self.accessToken forService:APP_NET_SERVICE account:self.username error:&error];
 }
 
 + (NSArray *)allAccounts
@@ -70,7 +72,9 @@
 
 + (AppNetUser *)accountForUsername:(NSString *)username
 {
-    NSString* password = [SSKeychain passwordForService:APP_NET_SERVICE account:username];
+    NSError* error;
+    
+    NSString* password = [SSKeychain passwordForService:APP_NET_SERVICE account:username error:&error];
     
     if (password)
     {

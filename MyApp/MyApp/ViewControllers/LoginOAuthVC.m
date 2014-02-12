@@ -8,6 +8,7 @@
 
 #import "LoginOAuthVC.h"
 #import "StreamVC.h"
+#import "AppNetUser.h"
 
 @interface LoginOAuthVC () <UIWebViewDelegate>
 
@@ -17,29 +18,30 @@
 
 @implementation LoginOAuthVC
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewWillAppear:animated];
+    
+    //
+    // Check for login, redirect immediately if available
+    //
+    
+    if ([AppNetUser defaultUser])
+    {
+        id streamVC = [self.storyboard instantiateViewControllerWithIdentifier:@"StreamVC"];
+        
+        [streamVC setClient:[ANKClient sharedClient]];
+        
+        [self.navigationController pushViewController:streamVC animated:NO];
+        
+        return;
+    }
     
     self.webView.delegate = self;
-
+    
     ANKAuthScope requestedScopes = ANKAuthScopeStream;
     
-    id handler = ^(BOOL success, NSError *error)
-    {
-        if (success)
-        {
-            NSLog(@"we are authenticated and ready to make API calls!");
-        }
-        else
-        {
-            NSLog(@"could not authenticate, error: %@", error);
-        }
-    };
-    
-    [ANKClient sharedClient].webAuthCompletionHandler = handler;
-    
-    // create a URLRequest to kick off the auth process...
+    // Create a URLRequest to kick off the auth process...
     NSURLRequest *request = [[ANKClient sharedClient] webAuthRequestForClientID:APP_NET_CLIENT_ID redirectURI:@"myapp://auth" authScopes:requestedScopes state:nil appStoreCompliant:YES];
     
     [self.webView loadRequest:request];
@@ -83,12 +85,22 @@
             [[ANKClient sharedClient] authenticateWebAuthAccessCode:code forClientID:APP_NET_CLIENT_ID clientSecret:APP_NET_CLIENT_SECRET];
             
             //
+            // Save token to default user for now
+            //
+            
+            AppNetUser* user = [[AppNetUser alloc] init];
+            user.username = APP_NET_DEFAULT_USER;
+            user.accessToken = code;
+            
+            [user save];
+            
+            //
             // Perform Segue to Stream view controller, but since this method could be called on another thread,
             // need to make sure segue happens back on main thread.
             //
             dispatch_async(dispatch_get_main_queue(), ^
             {
-                [self performSegueWithIdentifier:@"StreamVC" sender:self];
+                [self performSegueWithIdentifier:@"StreamSegue" sender:self];
             });
 
             

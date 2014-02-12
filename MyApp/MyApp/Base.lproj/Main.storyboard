@@ -27,7 +27,7 @@
                     <navigationItem key="navigationItem" id="RzO-zT-xER"/>
                     <connections>
                         <outlet property="webView" destination="rSR-ML-E9B" id="Gth-g8-120"/>
-                        <segue destination="djK-nP-f5o" kind="push" id="UtV-bo-VpN"/>
+                        <segue destination="djK-nP-f5o" kind="push" identifier="StreamSegue" id="UtV-bo-VpN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rnu-gy-Qim" userLabel="First Responder" sceneMemberID="firstResponder"/>

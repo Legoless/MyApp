@@ -8,6 +8,10 @@
 
 #import "StreamVC.h"
 
+@interface StreamVC ()
+
+@end
+
 @implementation StreamVC
 
 @end

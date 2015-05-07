@@ -19,7 +19,7 @@ View Controllers
 - `LoginOAuthVC` - Handles representing login sheet to the user and saving of authorized users.
 - `StreamVC` - Handles representing and refreshing the list of posts in real time.
 
-Todo list
+Issues
 =====
 - No logout button - *Turn off network connection to logout and restart the application.*
 - Network connection handling - *Connection loss requires hard restart of the application.*

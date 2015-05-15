@@ -34,3 +34,17 @@ Libraries
 - **SSKeychain** - Used to securely store App.net access token, as recommended by documentation.
 - **SVPullToRefresh** - Used to add simple infinite loading of posts.
 
+Contact
+======
+
+Dal Rupnik
+
+- [legoless](https://github.com/legoless) on **GitHub**
+- [@thelegoless](https://twitter.com/thelegoless) on **Twitter**
+- [dal@unifiedsense.com](mailto:dal@unifiedsense.com)
+
+License
+=====
+
+**MyApp** is available under the MIT license. See [LICENSE](https://github.com/Legoless/MyApp/blob/master/LICENSE) file for more information.
+

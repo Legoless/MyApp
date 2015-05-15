@@ -9,7 +9,7 @@
 #ifndef MyApp_Defines_h
 #define MyApp_Defines_h
 
-#define APP_NET_CLIENT_ID @"SRvbLhvsm9k9kSYje9x6gqHmCQDatCat"
-#define APP_NET_CLIENT_SECRET @"fxVnFhfKyF4qgDdEuJRmTkf6qTsmgAzb"
+#define APP_NET_CLIENT_ID @"<APP_NET_CLIENT_ID>"
+#define APP_NET_CLIENT_SECRET @"<APP_NET_CLIENT_SECRET>"
 
 #endif

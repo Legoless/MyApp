@@ -1,7 +1,7 @@
 MyApp
 =====
 
-A simple and elegant iOS 7 **App.net** client for iPhone, coded for quick practice. It displays unified stream of posts of logged in user in similar way as TweetBot does it for Twitter.
+A simple and elegant iOS **App.net** client for iPhone, coded for a quick practice. It displays unified stream of posts of logged in user in similar way as TweetBot does it for Twitter.
 
 ![Screenshot](https://raw.githubusercontent.com/Legoless/MyApp/master/Resources/screenshot.png "Screenshot")
 
@@ -27,7 +27,7 @@ Issues
 Libraries
 =====
 - **ADNKit** - Handles asynchronous requests to **App.net** API, built on top of `AFNetworking`.
-- **AFNetworking** - Modern networking library, used by `ADNKit`, includes JSON parsing capabilities.
+- [**AFNetworking**](https://github.com/AFNetworking/AFNetworking) - Modern networking library, used by `ADNKit`, includes JSON parsing capabilities.
 - **M13ProgressSuite** - Displays different progress views, including the ring intermediate progress view.
 - **Reveal-iOS-SDK** - Used only for debugging errors in layout.
 - **SDWebImage** - Used to load images of avatars from provided URL using a cache.

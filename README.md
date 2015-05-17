@@ -26,7 +26,7 @@ Issues
 
 Libraries
 =====
-- **ADNKit** - Handles asynchronous requests to **App.net** API, built on top of `AFNetworking`.
+- [**ADNKit**](https://github.com/joeldev/ADNKit) - Handles asynchronous requests to **App.net** API, built on top of `AFNetworking`.
 - [**AFNetworking**](https://github.com/AFNetworking/AFNetworking) - Modern networking library, used by `ADNKit`, includes JSON parsing capabilities.
 - **M13ProgressSuite** - Displays different progress views, including the ring intermediate progress view.
 - **Reveal-iOS-SDK** - Used only for debugging errors in layout.
